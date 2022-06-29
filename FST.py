@@ -6,6 +6,11 @@ class FST():
     def add_transition(self,in_state_name : str ,input : chr,output : chr,out_stat_name : str):
         if in_state_name in self.sts and out_stat_name in self.sts:
             self.trans.append(transition(in_state_name,input,output,out_stat_name))
+    def __is_final(self,state_name : str):
+        for s in self.sts:
+            if s.name == state_name:
+                return s.is_final
+        return False
     def run(self,inp : str):
         to_p = [("","q0")] # list to pars
         p_out = [] # list for output
@@ -16,7 +21,7 @@ class FST():
                         p_out.append((tp[0] + t.output , t.out_stat_name))
             to_p = p_out
             p_out = []
-        return to_p
+        return [to_p[i][0] for i in range(len(to_p)) if self.__is_final(to_p[i][1])]
 
 
         
