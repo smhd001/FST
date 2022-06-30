@@ -2,22 +2,22 @@ class FST:
     trans = []
     sts = []
 
-    def add_state(self, state_name: str, is_final: bool):
+    def add_state(self, state_name: str, is_final: bool) -> None:
         self.sts.append(state(state_name, is_final))
 
     def add_transition(
         self, in_state_name: str, input: chr, output: chr, out_stat_name: str
-    ):
+    ) -> None:
         if in_state_name in self.sts and out_stat_name in self.sts:
             self.trans.append(transition(in_state_name, input, output, out_stat_name))
 
-    def __is_final(self, state_name: str):
+    def __is_final(self, state_name: str) -> bool:
         for s in self.sts:
             if s.name == state_name:
                 return s.is_final
         return False
 
-    def run(self, inp: str):
+    def run(self, inp: str) -> list[str]:
         to_p = [("", "q0")]  # list to pars
         p_out = []  # list for output
         for c in inp:
