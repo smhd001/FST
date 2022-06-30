@@ -10,6 +10,15 @@ class FST:
     ) -> None:
         if in_state_name in self.sts and out_stat_name in self.sts:
             self.trans.append(transition(in_state_name, input, output, out_stat_name))
+        else:
+            print("no such transition name",in_state_name,out_stat_name)
+
+    def add_set_transition(
+        self, in_state_name: str, input: str, output: str, out_stat_name: str
+    ) -> None:
+        for inp, out in zip(input, output):
+            self.add_transition(in_state_name, inp, out, out_stat_name)
+        
 
     def __is_final(self, state_name: str) -> bool:
         for s in self.sts:
