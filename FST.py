@@ -32,7 +32,7 @@ class FST:
                     to_p.append((tp[0] + t.output, t.out_stat_name))
         return to_p
 
-    def run(self, inp: str) -> list[str]:
+    def run(self, inp: str) -> None:
         to_p = [("", "q0")]  # list to pars
         p_out = []  # list for output
         for c in inp:
@@ -43,7 +43,11 @@ class FST:
             p_out = self.__landa_transition(p_out)
             to_p = p_out
             p_out = []
-        return [i[0] for i in to_p if self.__is_final(i[1])]
+        res = [i[0] for i in to_p if self.__is_final(i[1])]
+        if res:
+            print(res)
+        else:
+            print("\033[91m" + "FAIL" + "\033[0m")
 
 
 class state:
