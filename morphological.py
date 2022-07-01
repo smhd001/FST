@@ -46,6 +46,7 @@ fst.add_transition("qv", "e", "e", "qs")
 fst.add_state("qn", False)
 fst.add_set_transition("q0", NONSPECIAL, "qn")
 fst.add_transition("qn", "", "", "qs")
+
 # h but not [cs]h
 AZ_SC = AZ.replace("c", "").replace("s", "")
 fst.add_state("qh", False)
@@ -58,7 +59,7 @@ fst.add_state("qe", False)
 fst.add_set_transition("q0", AZ_E, "qe")
 fst.add_transition("qe", "e", "e", "qs")
 
-with open("./test.txt") as f:
+with open("test.txt") as f:
     for t in f:
-        print(t.strip())
+        print(t.strip() + " --> ", end="")
         fst.run(t.strip())
