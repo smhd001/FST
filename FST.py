@@ -1,15 +1,14 @@
 class FST:
-    trans = []
-    sts = []
+    sts = {}
 
     def add_state(self, state_name: str, is_final: bool) -> None:
-        self.sts.append(state(state_name, is_final))
+        self.sts[state_name] = state(state_name, is_final)
 
     def add_transition(
         self, in_state_name: str, input: chr, output: chr, out_stat_name: str
     ) -> None:
         if in_state_name in self.sts and out_stat_name in self.sts:
-            self.trans.append(transition(in_state_name, input, output, out_stat_name))
+            self.sts[in_state_name].trans.append(transition(input,output,out_stat_name))
         else:
             print("no such state name", in_state_name, out_stat_name)
 
@@ -21,14 +20,14 @@ class FST:
 
     def __is_final(self, state_name: str) -> bool:
         for s in self.sts:
-            if s.name == state_name:
-                return s.is_final
+            if s == state_name:
+                return self.sts[s].is_final
         return False
 
     def __landa_transition(self, to_p: list) -> list[str]:
         for tp in to_p:
-            for t in self.trans:
-                if t.input == "" and tp[1] == t.in_state_name:
+            for t in self.sts[tp[1]].trans:
+                if t.input == "" :
                     to_p.append((tp[0] + t.output, t.out_stat_name))
         return to_p
 
@@ -37,8 +36,8 @@ class FST:
         p_out = []  # list for output
         for c in inp:
             for tp in to_p:
-                for t in self.trans:
-                    if tp[1] == t.in_state_name and c == t.input:
+                for t in self.sts[tp[1]].trans:
+                    if c == t.input:
                         p_out.append((tp[0] + t.output, t.out_stat_name))
             p_out = self.__landa_transition(p_out)
             to_p = p_out
@@ -51,10 +50,9 @@ class FST:
 
 
 class state:
-    name = ""
-    is_final = False
-
     def __init__(self, name: str, is_final: bool) -> None:
+        self.trans = []
+        self.is_final = False
         self.name = name
         self.is_final = is_final
 
@@ -68,23 +66,14 @@ class state:
 
 
 class transition:
-    in_state_name = ""
-    input = ""
-    output = ""
-    out_stat_name = ""
-
-    def __init__(
-        self, in_state_name: str, input: chr, output: chr, out_stat_name: str
-    ) -> None:
-        self.in_state_name = in_state_name
+    def __init__(self, input: chr, output: chr, out_stat_name: str) -> None:
         self.input = input
         self.output = output
         self.out_stat_name = out_stat_name
 
     def __str__(self) -> str:
         return (
-            self.in_state_name
-            + "->"
+            "->"
             + self.out_stat_name
             + "("
             + self.input
