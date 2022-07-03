@@ -5,10 +5,12 @@ class FST:
         self.sts[state_name] = state(state_name, is_final)
 
     def add_transition(
-        self, in_state_name: str, input: chr, output: chr, out_stat_name: str
+        self, in_state_name: str, input: str, output: str, out_stat_name: str
     ) -> None:
         if in_state_name in self.sts and out_stat_name in self.sts:
-            self.sts[in_state_name].trans.append(transition(input,output,out_stat_name))
+            self.sts[in_state_name].trans.append(
+                transition(input, output, out_stat_name)
+            )
         else:
             print("no such state name", in_state_name, out_stat_name)
 
@@ -27,7 +29,7 @@ class FST:
     def __landa_transition(self, to_p: list) -> list[str]:
         for tp in to_p:
             for t in self.sts[tp[1]].trans:
-                if t.input == "" :
+                if t.input == "":
                     to_p.append((tp[0] + t.output, t.out_stat_name))
         return to_p
 
@@ -66,18 +68,10 @@ class state:
 
 
 class transition:
-    def __init__(self, input: chr, output: chr, out_stat_name: str) -> None:
+    def __init__(self, input: str, output: str, out_stat_name: str) -> None:
         self.input = input
         self.output = output
         self.out_stat_name = out_stat_name
 
     def __str__(self) -> str:
-        return (
-            "->"
-            + self.out_stat_name
-            + "("
-            + self.input
-            + ","
-            + self.output
-            + ")"
-        )
+        return "->" + self.out_stat_name + "(" + self.input + "," + self.output + ")"
